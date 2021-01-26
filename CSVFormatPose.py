@@ -132,7 +132,7 @@ class sPoseWithCovStamped:
         self.qyy = vec[19]
 
 
-class CSVFormat(Enum):
+class CSVFormatPose(Enum):
     Timestamp = 'Timestamp'
     # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
     TUM = 'TUM'
@@ -148,9 +148,10 @@ class CSVFormat(Enum):
 
     @staticmethod
     def list():
-        return list([str(CSVFormat.Timestamp), str(CSVFormat.TUM), str(CSVFormat.TUM_short), str(CSVFormat.PoseCov),
-                     str(CSVFormat.PoseWithCov),
-                     str(CSVFormat.none)])
+        return list([str(CSVFormatPose.Timestamp), str(CSVFormatPose.TUM), str(CSVFormatPose.TUM_short),
+                     str(CSVFormatPose.PoseCov),
+                     str(CSVFormatPose.PoseWithCov),
+                     str(CSVFormatPose.none)])
 
     @staticmethod
     def get_header(fmt):
@@ -222,14 +223,14 @@ class CSVFormat(Enum):
         if os.path.exists(fn):
             with open(fn, "r") as file:
                 header = str(file.readline()).rstrip("\n\r")
-                for fmt in CSVFormat.list():
-                    h_ = ",".join(CSVFormat.get_header(fmt))
+                for fmt in CSVFormatPose.list():
+                    h_ = ",".join(CSVFormatPose.get_header(fmt))
                     if h_.replace(" ", "") == header.replace(" ", ""):
-                        return CSVFormat(fmt)
-                print("CSVFormat.identify_format(): Header unknown!\n\t[" + str(header) + "]")
+                        return CSVFormatPose(fmt)
+                print("CSVFormatPose.identify_format(): Header unknown!\n\t[" + str(header) + "]")
         else:
-            print("CSVFormat.identify_format(): File not found!\n\t[" + str(fn) + "]")
-        return CSVFormat.none
+            print("CSVFormatPose.identify_format(): File not found!\n\t[" + str(fn) + "]")
+        return CSVFormatPose.none
 
 
 ########################################################################################################################
@@ -242,34 +243,34 @@ class CSVFormat_Test(unittest.TestCase):
     def test_header(self):
         print('TUM CSV header:')
 
-        for type in CSVFormat.list():
-            print(str(CSVFormat.get_header(type)))
+        for type in CSVFormatPose.list():
+            print(str(CSVFormatPose.get_header(type)))
 
     def test_get_format(self):
         print('TUM CSV get_format:')
 
-        for type in CSVFormat.list():
-            print(str(CSVFormat.get_format(type)))
+        for type in CSVFormatPose.list():
+            print(str(CSVFormatPose.get_format(type)))
 
     def test_identify(self):
-        fmt = CSVFormat.identify_format('../sample_data/ID1-pose-err.csv')
+        fmt = CSVFormatPose.identify_format('../sample_data/ID1-pose-err.csv')
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormat.TUM)
-        fmt = CSVFormat.identify_format('../sample_data/ID1-pose-est-cov.csv')
+        self.assertTrue(fmt == CSVFormatPose.TUM)
+        fmt = CSVFormatPose.identify_format('../sample_data/ID1-pose-est-cov.csv')
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormat.PoseWithCov)
-        fmt = CSVFormat.identify_format('../sample_data/ID1-pose-gt.csv')
+        self.assertTrue(fmt == CSVFormatPose.PoseWithCov)
+        fmt = CSVFormatPose.identify_format('../sample_data/ID1-pose-gt.csv')
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormat.TUM)
-        fmt = CSVFormat.identify_format('../sample_data/example_eval.csv')
+        self.assertTrue(fmt == CSVFormatPose.TUM)
+        fmt = CSVFormatPose.identify_format('../sample_data/example_eval.csv')
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormat.none)
-        fmt = CSVFormat.identify_format('../sample_data/212341234.csv')
+        self.assertTrue(fmt == CSVFormatPose.none)
+        fmt = CSVFormatPose.identify_format('../sample_data/212341234.csv')
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormat.none)
-        fmt = CSVFormat.identify_format('../sample_data/t_est.csv')
+        self.assertTrue(fmt == CSVFormatPose.none)
+        fmt = CSVFormatPose.identify_format('../sample_data/t_est.csv')
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormat.Timestamp)
+        self.assertTrue(fmt == CSVFormatPose.Timestamp)
 
 
 if __name__ == '__main__':

@@ -29,7 +29,7 @@ class sTimestamp:
         self.t = vec[0]
 
 
-class sTUM:
+class sTUMPoseStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 8)
         self.t = vec[0]
@@ -42,7 +42,7 @@ class sTUM:
         self.qw = vec[7]
 
 
-class sTUM_short:
+class sPositionStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 4)
         self.t = vec[0]
@@ -51,7 +51,7 @@ class sTUM_short:
         self.tz = vec[3]
 
 
-class sPoseCov:
+class sPoseCovStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 13)
         self.t = vec[0]
@@ -69,7 +69,7 @@ class sPoseCov:
         self.qyy = vec[12]
 
 
-class sPoseWithCov:
+class sTUMPoseWithCovStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 20)
         self.t = vec[0]
@@ -169,13 +169,13 @@ class CSVFormat(Enum):
         if str(fmt) == 'Timestamp' or len(elems) == 1:
             return sTimestamp(vec=[float(x) for x in elems[0:1]])
         elif str(fmt) == 'TUM' or len(elems) == 8:
-            return sTUM(vec=[float(x) for x in elems[0:8]])
+            return sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
         elif str(fmt) == 'TUM_short' or len(elems) == 4:
-            return sTUM_short(vec=[float(x) for x in elems[0:4]])
+            return sPositionStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PoseCov' or len(elems) == 13:
-            return sPoseCov(vec=[float(x) for x in elems[0:13]])
+            return sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
         elif str(fmt) == 'PoseWithCov' or len(elems) == 20:
-            return sPoseWithCov(vec=[float(x) for x in elems])
+            return sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
         else:
             return None
 

@@ -19,8 +19,6 @@ The [CSVFormat.TUM](CSVFormat.py) format, got it's name for file format used in 
 
 ## TODO:
 
-* rename `sTUM_short` to `sPosition`
-* rename `sPoseWithCov` to `sTUMWithCov`
 * create a `sPose` with quaternions in alphabetic order!
 * create a `sPoseWithCov` with quaternions in alphabetic order!
 * rename `CSVFormat` to `CSVFormatPose`

@@ -26,9 +26,8 @@ from enum import Enum
 
 class CSVFormatPose(Enum):
     Timestamp = 'Timestamp'
-    # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
-    TUM = 'TUM'
-    TUM_short = 'TUM_short'
+    TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
+    PositionStamped = 'PositionStamped'
     PoseCov = 'PoseCov'
     PoseWithCov = 'PoseWithCov'
     none = 'none'
@@ -40,7 +39,7 @@ class CSVFormatPose(Enum):
 
     @staticmethod
     def list():
-        return list([str(CSVFormatPose.Timestamp), str(CSVFormatPose.TUM), str(CSVFormatPose.TUM_short),
+        return list([str(CSVFormatPose.Timestamp), str(CSVFormatPose.TUM), str(CSVFormatPose.PositionStamped),
                      str(CSVFormatPose.PoseCov),
                      str(CSVFormatPose.PoseWithCov),
                      str(CSVFormatPose.none)])
@@ -51,7 +50,7 @@ class CSVFormatPose(Enum):
             return ['#t']
         elif str(fmt) == 'TUM':
             return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
-        elif str(fmt) == 'TUM_short':
+        elif str(fmt) == 'PositionStamped':
             return ['#t', 'tx', 'ty', 'tz']
         elif str(fmt) == 'PoseCov':
             return ['#t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
@@ -68,7 +67,7 @@ class CSVFormatPose(Enum):
             return ['t']
         elif str(fmt) == 'TUM':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
-        elif str(fmt) == 'TUM_short':
+        elif str(fmt) == 'PositionStamped':
             return ['t', 'tx', 'ty', 'tz']
         elif str(fmt) == 'PoseCov':
             return ['t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
@@ -85,7 +84,7 @@ class CSVFormatPose(Enum):
             return 1
         elif str(fmt) == 'TUM':
             return 8
-        elif str(fmt) == 'TUM_short':
+        elif str(fmt) == 'PositionStamped':
             return 4
         elif str(fmt) == 'PoseCov':
             return 13
@@ -101,7 +100,7 @@ class CSVFormatPose(Enum):
             return sTimestamp(vec=[float(x) for x in elems[0:1]])
         elif str(fmt) == 'TUM' or len(elems) == 8:
             return sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
-        elif str(fmt) == 'TUM_short' or len(elems) == 4:
+        elif str(fmt) == 'PositionStamped' or len(elems) == 4:
             return sPositionStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PoseCov' or len(elems) == 13:
             return sPoseCovStamped(vec=[float(x) for x in elems[0:13]])

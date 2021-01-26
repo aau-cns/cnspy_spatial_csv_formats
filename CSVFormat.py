@@ -42,6 +42,19 @@ class sTUMPoseStamped:
         self.qw = vec[7]
 
 
+class sPoseStamped:
+    def __init__(self, vec=None):
+        assert (len(vec) == 8)
+        self.t = vec[0]
+        self.tx = vec[1]
+        self.ty = vec[2]
+        self.tz = vec[3]
+        self.qw = vec[4]
+        self.qx = vec[5]
+        self.qy = vec[6]
+        self.qz = vec[7]
+
+
 class sPositionStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 4)
@@ -80,6 +93,31 @@ class sTUMPoseWithCovStamped:
         self.qy = vec[5]
         self.qz = vec[6]
         self.qw = vec[7]
+        self.pxx = vec[8]
+        self.pxy = vec[9]
+        self.pxz = vec[10]
+        self.pyy = vec[11]
+        self.pyz = vec[12]
+        self.pzz = vec[13]
+        self.qrr = vec[14]
+        self.qrp = vec[15]
+        self.qry = vec[16]
+        self.qpp = vec[17]
+        self.qpy = vec[18]
+        self.qyy = vec[19]
+
+
+class sPoseWithCovStamped:
+    def __init__(self, vec=None):
+        assert (len(vec) == 20)
+        self.t = vec[0]
+        self.tx = vec[1]
+        self.ty = vec[2]
+        self.tz = vec[3]
+        self.qw = vec[4]
+        self.qx = vec[5]
+        self.qy = vec[6]
+        self.qz = vec[7]
         self.pxx = vec[8]
         self.pxy = vec[9]
         self.pxz = vec[10]

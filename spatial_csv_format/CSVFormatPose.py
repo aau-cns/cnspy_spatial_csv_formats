@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# Requirements:
-# enum
 ########################################################################################################################
 import os
 from spatial_csv_formats.PoseStructs import *
@@ -124,45 +122,3 @@ class CSVFormatPose(Enum):
         return CSVFormatPose.none
 
 
-########################################################################################################################
-#################################################### T E S T ###########################################################
-########################################################################################################################
-import unittest
-
-
-class CSVFormat_Test(unittest.TestCase):
-    def test_header(self):
-        print('TUM CSV header:')
-
-        for type in CSVFormatPose.list():
-            print(str(CSVFormatPose.get_header(type)))
-
-    def test_get_format(self):
-        print('TUM CSV get_format:')
-
-        for type in CSVFormatPose.list():
-            print(str(CSVFormatPose.get_format(type)))
-
-    def test_identify(self):
-        fmt = CSVFormatPose.identify_format('./sample_data/ID1-pose-err.csv')
-        print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.TUM)
-        fmt = CSVFormatPose.identify_format('./sample_data/ID1-pose-est-cov.csv')
-        print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.PoseWithCov)
-        fmt = CSVFormatPose.identify_format('./sample_data/ID1-pose-gt.csv')
-        print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.TUM)
-        fmt = CSVFormatPose.identify_format('./sample_data/example_eval.csv')
-        print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.none)
-        fmt = CSVFormatPose.identify_format('./sample_data/212341234.csv')
-        print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.none)
-        fmt = CSVFormatPose.identify_format('./sample_data/t_est.csv')
-        print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.Timestamp)
-
-
-if __name__ == '__main__':
-    unittest.main()

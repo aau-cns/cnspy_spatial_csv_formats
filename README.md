@@ -21,8 +21,8 @@ The [CSVFormatPose.TUM](CSVFormatPose.py) format, got it's name for file format 
 
 Install the current code base from GitHub and pip install a link to that cloned copy
 ```
-git clone https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_format.git
-cd spatial_csv_format
+git clone https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_formats.git
+cd spatial_csv_formats
 pip install -e .
 ```
 

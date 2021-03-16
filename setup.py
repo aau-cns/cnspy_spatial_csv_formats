@@ -14,16 +14,16 @@ with open(path.join(here, 'RELEASE'), encoding='utf-8') as f:
     release = f.read()
 
 setup(
-    name='spatial_csv_format',
+    name='spatial_csv_formats',
     version=release,
     author='Roland Jung',
     author_email='roland.jung@aau.at',    
     description='Spatial formats for CSV files.',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_format/',
+    url='https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_formats/',
     project_urls={
-        "Bug Tracker": "https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_format/issues",
+        "Bug Tracker": "https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_formats/issues",
     },    
     classifiers=[
         "Programming Language :: Python :: 3",

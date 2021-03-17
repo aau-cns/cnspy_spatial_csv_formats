@@ -18,7 +18,7 @@
 #
 ########################################################################################################################
 import os
-from cnspy_spatial_csv_formats.PoseStructs import *
+import cnspy_spatial_csv_formats.PoseStructs as ps
 from enum import Enum
 
 
@@ -95,15 +95,15 @@ class CSVFormatPose(Enum):
     def parse(line, fmt):
         elems = line.split(",")
         if str(fmt) == 'Timestamp' or len(elems) == 1:
-            return sTimestamp(vec=[float(x) for x in elems[0:1]])
+            return ps.sTimestamp(vec=[float(x) for x in elems[0:1]])
         elif str(fmt) == 'TUM' or len(elems) == 8:
-            return sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
+            return ps.sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
         elif str(fmt) == 'PositionStamped' or len(elems) == 4:
-            return sPositionStamped(vec=[float(x) for x in elems[0:4]])
+            return ps.sPositionStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PoseCov' or len(elems) == 13:
-            return sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
+            return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
         elif str(fmt) == 'PoseWithCov' or len(elems) == 20:
-            return sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
+            return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
         else:
             return None
 

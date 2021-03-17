@@ -14,20 +14,22 @@ with open(path.join(here, 'RELEASE'), encoding='utf-8') as f:
     release = f.read()
 
 setup(
-    name='spatial_csv_formats',
+    name='cnspy_spatial_csv_formats',
     version=release,
     author='Roland Jung',
     author_email='roland.jung@aau.at',    
     description='Spatial formats for CSV files.',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_formats/',
+    url='https://gitlab.aau.at/aau-cns/py3_pkgs/cnspy_spatial_csv_formats/',
     project_urls={
-        "Bug Tracker": "https://gitlab.aau.at/aau-cns/py3_pkgs/spatial_csv_formats/issues",
+        "Bug Tracker": "https://gitlab.aau.at/aau-cns/py3_pkgs/cnspy_spatial_csv_formats/issues",
     },    
     classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU GPLv3 License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
     

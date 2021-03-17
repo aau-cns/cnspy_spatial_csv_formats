@@ -18,7 +18,7 @@
 #
 ########################################################################################################################
 import os
-from spatial_csv_formats.PoseStructs import *
+from cnspy_spatial_csv_formats.PoseStructs import *
 from enum import Enum
 
 

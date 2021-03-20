@@ -25,6 +25,10 @@ git clone https://github.com/aau-cns/spatial_csv_formats.git
 cd spatial_csv_formats
 pip install -e .
 ```
+or the [official package](https://pypi.org/project/cnspy-spatial-csv-formats/) via
+```commandline
+pip install cnspy-spatial-csv-formats
+```
 
 
 ## Dependencies

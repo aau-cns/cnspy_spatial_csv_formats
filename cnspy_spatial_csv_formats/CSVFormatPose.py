@@ -34,9 +34,9 @@ class CSVFormatPose(Enum):
     TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
     PositionStamped = 'PositionStamped'
     PosOrientCov = 'PosOrientCov'
-    #PosOrientCov = 'PosOrientCov'
+    #PoseCov = 'PoseCov'
     PosOrientWithCov = 'PosOrientWithCov'
-    #PosOrientWithCov = 'PosOrientWithCov'
+    #PoseWithCov = 'PoseWithCov'
     none = 'none'
 
     # HINT: if you add an entry here, please also add it to the .list() method!
@@ -110,9 +110,9 @@ class CSVFormatPose(Enum):
         elif str(fmt) == 'PositionStamped' or len(elems) == 4:
             return ps.sPositionStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PosOrientCov' or len(elems) == 13:
-            return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
+            return ps.sPosOrientCovStamped(vec=[float(x) for x in elems[0:13]])
         elif str(fmt) == 'PosOrientWithCov' or len(elems) == 20:
-            return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
+            return ps.sTUMPosOrientWithCovStamped(vec=[float(x) for x in elems])
         else:
             return None
 

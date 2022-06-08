@@ -19,13 +19,15 @@
 # Requirements:
 ########################################################################################################################
 
-
+# TODOs:
+# - TODO: Pose covariance would require correlations between position and orientation as well. Thus current PoseCov is rather a Pos+Orient Covariance
+# - TODO: maybe switch from JPL to Hammilton quaternion order
 class sTimestamp:
     def __init__(self, vec=None):
         assert (len(vec) == 1)
         self.t = vec[0]
 
-
+# uses JPL quaternion order (vec, scalar)
 class sTUMPoseStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 8)
@@ -61,7 +63,7 @@ class sPositionStamped:
         self.tz = vec[3]
 
 
-class sPoseCovStamped:
+class sPosOrientCovStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 13)
         self.t = vec[0]
@@ -78,8 +80,9 @@ class sPoseCovStamped:
         self.qpy = vec[11]
         self.qyy = vec[12]
 
+# uses JPL quaternion order (vec, scalar)
 
-class sTUMPoseWithCovStamped:
+class sTUMPosOrientWithCovStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 20)
         self.t = vec[0]
@@ -104,7 +107,7 @@ class sTUMPoseWithCovStamped:
         self.qyy = vec[19]
 
 
-class sPoseWithCovStamped:
+class sPosOrientWithCovStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 20)
         self.t = vec[0]

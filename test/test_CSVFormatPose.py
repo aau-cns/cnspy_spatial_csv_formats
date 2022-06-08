@@ -42,7 +42,7 @@ class CSVFormat_Test(unittest.TestCase):
         self.assertTrue(fmt == CSVFormatPose.TUM)
         fmt = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.PoseWithCov)
+        self.assertTrue(fmt == CSVFormatPose.PosOrientWithCov)
         fmt = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-gt.csv'))
         print('identify_format:' + str(fmt))
         self.assertTrue(fmt == CSVFormatPose.TUM)

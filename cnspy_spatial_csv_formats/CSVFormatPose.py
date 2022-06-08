@@ -21,13 +21,22 @@ import os
 import cnspy_spatial_csv_formats.PoseStructs as ps
 from enum import Enum
 
+# TODOs
+# - TODO: new format containing the estimation error type and rotation error representation!
+# - TODO: maybe convert from JPL quaternion order to Hammilton (qw, qx, qy ,qz)
+# - TODO: introduce a new PoseStruct element holding error types
+# - TODO: move EstiamtionErrorType to spatial_csv_formats
+# - TODO: move RotationErrorRepresenationType to spatial_csv_formats
+# - TODO: PoseCov would also require correlation between position and rotation, thus it must be renamed to PosRotCov
 
 class CSVFormatPose(Enum):
     Timestamp = 'Timestamp'
     TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
     PositionStamped = 'PositionStamped'
-    PoseCov = 'PoseCov'
-    PoseWithCov = 'PoseWithCov'
+    PosOrientCov = 'PosOrientCov'
+    #PosOrientCov = 'PosOrientCov'
+    PosOrientWithCov = 'PosOrientWithCov'
+    #PosOrientWithCov = 'PosOrientWithCov'
     none = 'none'
 
     # HINT: if you add an entry here, please also add it to the .list() method!
@@ -38,8 +47,8 @@ class CSVFormatPose(Enum):
     @staticmethod
     def list():
         return list([str(CSVFormatPose.Timestamp), str(CSVFormatPose.TUM), str(CSVFormatPose.PositionStamped),
-                     str(CSVFormatPose.PoseCov),
-                     str(CSVFormatPose.PoseWithCov),
+                     str(CSVFormatPose.PosOrientCov),
+                     str(CSVFormatPose.PosOrientWithCov),
                      str(CSVFormatPose.none)])
 
     @staticmethod
@@ -50,9 +59,9 @@ class CSVFormatPose(Enum):
             return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
         elif str(fmt) == 'PositionStamped':
             return ['#t', 'tx', 'ty', 'tz']
-        elif str(fmt) == 'PoseCov':
+        elif str(fmt) == 'PosOrientCov':
             return ['#t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
-        elif str(fmt) == 'PoseWithCov':
+        elif str(fmt) == 'PosOrientWithCov':
             return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
 
@@ -67,9 +76,9 @@ class CSVFormatPose(Enum):
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
         elif str(fmt) == 'PositionStamped':
             return ['t', 'tx', 'ty', 'tz']
-        elif str(fmt) == 'PoseCov':
+        elif str(fmt) == 'PosOrientCov':
             return ['t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
-        elif str(fmt) == 'PoseWithCov':
+        elif str(fmt) == 'PosOrientWithCov':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
         else:
@@ -84,9 +93,9 @@ class CSVFormatPose(Enum):
             return 8
         elif str(fmt) == 'PositionStamped':
             return 4
-        elif str(fmt) == 'PoseCov':
+        elif str(fmt) == 'PosOrientCov':
             return 13
-        elif str(fmt) == 'PoseWithCov':
+        elif str(fmt) == 'PosOrientWithCov':
             return 20
         else:
             return None
@@ -100,9 +109,9 @@ class CSVFormatPose(Enum):
             return ps.sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
         elif str(fmt) == 'PositionStamped' or len(elems) == 4:
             return ps.sPositionStamped(vec=[float(x) for x in elems[0:4]])
-        elif str(fmt) == 'PoseCov' or len(elems) == 13:
+        elif str(fmt) == 'PosOrientCov' or len(elems) == 13:
             return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
-        elif str(fmt) == 'PoseWithCov' or len(elems) == 20:
+        elif str(fmt) == 'PosOrientWithCov' or len(elems) == 20:
             return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
         else:
             return None

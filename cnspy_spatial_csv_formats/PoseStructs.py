@@ -80,8 +80,33 @@ class sPosOrientCovStamped:
         self.qpy = vec[11]
         self.qyy = vec[12]
 
-# uses JPL quaternion order (vec, scalar)
+class sPoseCovStamped:
+    def __init__(self, vec=None):
+        assert (len(vec) == 22)
+        self.t = vec[0]
+        self.Txx = vec[1]
+        self.Txy = vec[2]
+        self.Txz = vec[3]
+        self.Tyy = vec[4]
+        self.Tyz = vec[5]
+        self.Tzz = vec[6]
+        self.Trr = vec[7]
+        self.Trp = vec[8]
+        self.Try = vec[9]
+        self.Tpp = vec[10]
+        self.Tpy = vec[11]
+        self.Tyy = vec[12]
+        self.Txr = vec[13]
+        self.Txp = vec[14]
+        self.Txy = vec[15]
+        self.Tyr = vec[16]
+        self.Typ = vec[17]
+        self.Tyy = vec[18]
+        self.Tzr = vec[19]
+        self.Tzp = vec[20]
+        self.Tzy = vec[21]
 
+# uses JPL quaternion order (vec, scalar)
 class sTUMPosOrientWithCovStamped:
     def __init__(self, vec=None):
         assert (len(vec) == 20)
@@ -130,3 +155,70 @@ class sPosOrientWithCovStamped:
         self.qpp = vec[17]
         self.qpy = vec[18]
         self.qyy = vec[19]
+
+class sPoseWithCovStamped:
+    def __init__(self, vec=None):
+        assert (len(vec) == 29)
+        self.t = vec[0]
+        self.tx = vec[1]
+        self.ty = vec[2]
+        self.tz = vec[3]
+        self.qw = vec[4]
+        self.qx = vec[5]
+        self.qy = vec[6]
+        self.qz = vec[7]
+        self.Txx = vec[1+7]
+        self.Txy = vec[2+7]
+        self.Txz = vec[3+7]
+        self.Tyy = vec[4+7]
+        self.Tyz = vec[5+7]
+        self.Tzz = vec[6+7]
+        self.Trr = vec[7+7]
+        self.Trp = vec[8+7]
+        self.Try = vec[9+7]
+        self.Tpp = vec[10+7]
+        self.Tpy = vec[11+7]
+        self.Tyy = vec[12+7]
+        self.Txr = vec[13+7]
+        self.Txp = vec[14+7]
+        self.Txy = vec[15+7]
+        self.Tyr = vec[16+7]
+        self.Typ = vec[17+7]
+        self.Tyy = vec[18+7]
+        self.Tzr = vec[19+7]
+        self.Tzp = vec[20+7]
+        self.Tzy = vec[21+7]
+
+# uses JPL quaternion order (vec, scalar)
+class sTUMPoseWithCovStamped:
+    def __init__(self, vec=None):
+        assert (len(vec) == 29)
+        self.t = vec[0]
+        self.tx = vec[1]
+        self.ty = vec[2]
+        self.tz = vec[3]
+        self.qx = vec[4]
+        self.qy = vec[5]
+        self.qz = vec[6]
+        self.qw = vec[7]
+        self.Txx = vec[1+7]
+        self.Txy = vec[2+7]
+        self.Txz = vec[3+7]
+        self.Tyy = vec[4+7]
+        self.Tyz = vec[5+7]
+        self.Tzz = vec[6+7]
+        self.Trr = vec[7+7]
+        self.Trp = vec[8+7]
+        self.Try = vec[9+7]
+        self.Tpp = vec[10+7]
+        self.Tpy = vec[11+7]
+        self.Tyy = vec[12+7]
+        self.Txr = vec[13+7]
+        self.Txp = vec[14+7]
+        self.Txy = vec[15+7]
+        self.Tyr = vec[16+7]
+        self.Typ = vec[17+7]
+        self.Tyy = vec[18+7]
+        self.Tzr = vec[19+7]
+        self.Tzp = vec[20+7]
+        self.Tzy = vec[21+7]

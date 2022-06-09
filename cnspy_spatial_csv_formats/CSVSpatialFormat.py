@@ -23,22 +23,28 @@ from cnspy_spatial_csv_formats.CSVSpatialFormatType import CSVSpatialFormatType
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationErrorRepresentationType
 
+# TODOs
+# - TODO: replace usages of CSVSpatialFormatType by CSVSpatialFormat
+
 
 class CSVSpatialFormat:
-    csv_format = CSVSpatialFormatType.none
+    type = CSVSpatialFormatType.none
     estimation_error_type = EstimationErrorType.none
     rotation_error_representation = RotationErrorRepresentationType.none
 
-    def __init__(self, fmt=None, est_err_type=None, rot_err_type= None):
-        if fmt is not None:
-            self.csv_format = fmt
+    def __init__(self, fmt_type=None, est_err_type=None, rot_err_type= None):
+        if fmt_type is not None:
+            self.type = fmt_type
         if est_err_type is not None:
             self.estimation_error_type = est_err_type
         if rot_err_type is not None:
             self.rotation_error_representation = rot_err_type
 
     def get_header(self):
-        return CSVSpatialFormatType.get_header(self.csv_format, self.estimation_error_type, self.rotation_error_representation)
+        return CSVSpatialFormatType.get_header(self.type, self.estimation_error_type, self.rotation_error_representation)
+
+    def get_format(self):
+        return CSVSpatialFormatType.get_format(self.type)
 
     @staticmethod
     def identify_format(fn):

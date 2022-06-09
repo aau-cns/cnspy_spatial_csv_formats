@@ -25,13 +25,7 @@ from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationEr
 
 
 # TODOs
-# - TODO: new format containing the estimation error type and rotation error representation!
 # - TODO: introduce a new PoseStruct element holding error types
-# - TODO: move EstiamtionErrorType to spatial_csv_formats
-# - TODO: move RotationErrorRepresenationType to spatial_csv_formats
-# - TODO: PoseCov would also require correlation between position and rotation, thus it must be renamed to PosRotCov
-# - TODO: CSVSpatialFormatType file header might include the EstimationErrorType and RotationErrorRepresentation type as string
-# - TODO: rename CSVSpatialFormatType to CSVFormatTypes
 
 class CSVSpatialFormatType(Enum):
     Timestamp = 'Timestamp'

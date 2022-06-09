@@ -25,16 +25,16 @@ from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentatio
 
 
 # TODOs
-# - TODO: introduce a new PoseStruct element holding error types
+# - TODO: introduce PoseCov and PoseWithCov -> also in conversion ROSbag2CSV
 
 class CSVSpatialFormatType(Enum):
     Timestamp = 'Timestamp'
     TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
     PositionStamped = 'PositionStamped'
     PosOrientCov = 'PosOrientCov'
-    #PoseCov = 'PoseCov'
     PosOrientWithCov = 'PosOrientWithCov'
-    #PoseWithCov = 'PoseWithCov'
+    PoseCov = 'PoseCov'
+    PoseWithCov = 'PoseWithCov'
     none = 'none'
     # HINT: if you add an entry here, please also add it to the .list() + .has_uncertainty method!
 
@@ -48,9 +48,13 @@ class CSVSpatialFormatType(Enum):
 
     @staticmethod
     def list():
-        return list([str(CSVSpatialFormatType.Timestamp), str(CSVSpatialFormatType.TUM), str(CSVSpatialFormatType.PositionStamped),
+        return list([str(CSVSpatialFormatType.Timestamp),
+                     str(CSVSpatialFormatType.TUM),
+                     str(CSVSpatialFormatType.PositionStamped),
                      str(CSVSpatialFormatType.PosOrientCov),
                      str(CSVSpatialFormatType.PosOrientWithCov),
+                     str(CSVSpatialFormatType.PoseCov),
+                     str(CSVSpatialFormatType.PoseWithCov),
                      str(CSVSpatialFormatType.none)])
 
     @staticmethod
@@ -79,6 +83,28 @@ class CSVSpatialFormatType(Enum):
                 return elems + [str(est_err_type), str(err_rep)]
             else:
                 return elems
+        elif str(fmt) == 'PoseCov':
+            # R = Rz(y/c)Ry(b/p)Rx(r/a)
+            # a  for roll (r)
+            # b  for pitch (p)
+            # c  for yaw (y - is already used for y-position of the frame)
+            elems = ['#t', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
+                     'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
+                return elems + [str(est_err_type), str(err_rep)]
+            else:
+                return elems
+        elif str(fmt) == 'PoseWithCov':
+            # R = Rz(y/c)Ry(b/p)Rx(r/a)
+            # a  for roll (r)
+            # b  for pitch (p)
+            # c  for yaw (y - is already used for y-position of the frame)
+            elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
+                     'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
+                return elems + [str(est_err_type), str(err_rep)]
+            else:
+                return elems
 
         else:
             return ["# no header "]
@@ -96,6 +122,13 @@ class CSVSpatialFormatType(Enum):
         elif str(fmt) == 'PosOrientWithCov':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
+        elif str(fmt) == 'PoseCov':
+            return ['t', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
+                    'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+        elif str(fmt) == 'PoseWithCov':
+            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
+                    'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+
         else:
             return ['no format']
 
@@ -112,6 +145,10 @@ class CSVSpatialFormatType(Enum):
             return 13
         elif str(fmt) == 'PosOrientWithCov':
             return 20
+        elif str(fmt) == 'PoseCov':
+            return 22
+        elif str(fmt) == 'PoseWithCov':
+            return 29
         else:
             return None
 
@@ -128,6 +165,10 @@ class CSVSpatialFormatType(Enum):
             return ps.sPosOrientCovStamped(vec=[float(x) for x in elems[0:13]])
         elif str(fmt) == 'PosOrientWithCov' or len(elems) == 20:
             return ps.sTUMPosOrientWithCovStamped(vec=[float(x) for x in elems])
+        elif str(fmt) == 'PoseCov' or len(elems) == 22:
+            return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
+        elif str(fmt) == 'PoseWithCov' or len(elems) == 29:
+            return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
         else:
             return None
 

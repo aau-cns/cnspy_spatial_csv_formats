@@ -19,14 +19,15 @@
 ########################################################################################################################
 from enum import Enum
 
+
 # Please refer to "Error definitions and filter credibility evaluation", Jung and Weiss, 2022
 class ErrorRepresentationType(Enum):
-    R_small_theta = 'R_small_theta'  # R ~ eye(3) + skew(theta_R)
-    q_small_theta = 'q_small_theta'  # q ~ [1; 0.5 theta_q]
-    so3_theta = 'so3_theta'          # R = exp(skew(theta))
-    se3_tau = 'se3_tau'              # P = exp(skew([v;theta]))
-    rpy_degree = 'rpy_degree'        # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [deg]
-    rpy_rad = 'rpy_rad'              # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [rad]
+    R_small_theta = 'R_small_theta'  # R ~ eye(3) + skew(theta_R); if pose: R(3) x SO(3)
+    q_small_theta = 'q_small_theta'  # q ~ [1; 0.5 theta_q]; if pose: R(3) x H
+    so3_theta = 'so3_theta'          # R = exp(skew(theta)); if pose: R(3) x SO(3)
+    se3_tau = 'se3_tau'              # P = exp(skew(tau)); tau = [v;theta]; if pose: SE(3)
+    rpy_degree = 'rpy_degree'        # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [deg]; if pose: R(3) x SO(3)
+    rpy_rad = 'rpy_rad'              # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [rad]; if pose: R(3) x SO(3)
     none = 'none'
     # HINT: if you add an entry here, please also add it to the .list() method!
 
@@ -37,6 +38,8 @@ class ErrorRepresentationType(Enum):
     def list():
         return list([str(ErrorRepresentationType.R_small_theta),
                      str(ErrorRepresentationType.q_small_theta),
+                     str(ErrorRepresentationType.so3_theta),
+                     str(ErrorRepresentationType.se3_tau),
                      str(ErrorRepresentationType.rpy_degree),
                      str(ErrorRepresentationType.rpy_rad),
                      str(ErrorRepresentationType.none)])

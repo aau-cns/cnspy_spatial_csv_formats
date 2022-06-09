@@ -18,16 +18,20 @@
 #
 ########################################################################################################################
 import os
-import cnspy_spatial_csv_formats.PoseStructs as ps
 from enum import Enum
+import cnspy_spatial_csv_formats.PoseStructs as ps
+from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
+from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationErrorRepresentationType
+
 
 # TODOs
 # - TODO: new format containing the estimation error type and rotation error representation!
-# - TODO: maybe convert from JPL quaternion order to Hammilton (qw, qx, qy ,qz)
 # - TODO: introduce a new PoseStruct element holding error types
 # - TODO: move EstiamtionErrorType to spatial_csv_formats
 # - TODO: move RotationErrorRepresenationType to spatial_csv_formats
 # - TODO: PoseCov would also require correlation between position and rotation, thus it must be renamed to PosRotCov
+# - TODO: CSVFormatPose file header might include the EstimationErrorType and RotationErrorRepresentation type as string
+# - TODO: rename CSVFormatPose to CSVFormatTypes
 
 class CSVFormatPose(Enum):
     Timestamp = 'Timestamp'
@@ -38,11 +42,15 @@ class CSVFormatPose(Enum):
     PosOrientWithCov = 'PosOrientWithCov'
     #PoseWithCov = 'PoseWithCov'
     none = 'none'
-
-    # HINT: if you add an entry here, please also add it to the .list() method!
+    # HINT: if you add an entry here, please also add it to the .list() + .has_uncertainty method!
 
     def __str__(self):
         return self.value
+
+    def has_uncertainty(self):
+        if self == CSVFormatPose.PosOrientCov or self == CSVFormatPose.PosOrientWithCov:
+            return True
+        return False
 
     @staticmethod
     def list():
@@ -52,18 +60,31 @@ class CSVFormatPose(Enum):
                      str(CSVFormatPose.none)])
 
     @staticmethod
-    def get_header(fmt):
-        if str(fmt) == 'Timestamp':
+    def get_header(fmt, est_err_type=EstimationErrorType.none, rot_err_rep=RotationErrorRepresentationType.none):
+        assert (isinstance(est_err_type, EstimationErrorType))
+        assert (isinstance(rot_err_rep, RotationErrorRepresentationType))
+        if str(fmt) == 'Timestamp' and est_err_type is EstimationErrorType.none and \
+                rot_err_rep is RotationErrorRepresentationType.none:
             return ['#t']
-        elif str(fmt) == 'TUM':
+        elif str(fmt) == 'TUM' and est_err_type is EstimationErrorType.none and \
+                rot_err_rep is RotationErrorRepresentationType.none:
             return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
-        elif str(fmt) == 'PositionStamped':
+        elif str(fmt) == 'PositionStamped' and est_err_type is EstimationErrorType.none and \
+                rot_err_rep is RotationErrorRepresentationType.none:
             return ['#t', 'tx', 'ty', 'tz']
         elif str(fmt) == 'PosOrientCov':
-            return ['#t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
+            elems = ['#t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
+            if est_err_type is not EstimationErrorType.none or rot_err_rep is not RotationErrorRepresentationType.none:
+                return elems + [str(est_err_type), str(rot_err_rep)]
+            else:
+                return elems
         elif str(fmt) == 'PosOrientWithCov':
-            return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
+            elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
+            if est_err_type is not EstimationErrorType.none or rot_err_rep is not RotationErrorRepresentationType.none:
+                return elems + [str(est_err_type), str(rot_err_rep)]
+            else:
+                return elems
 
         else:
             return ["# no header "]
@@ -118,16 +139,41 @@ class CSVFormatPose(Enum):
 
     @staticmethod
     def identify_format(fn):
+        """
+
+        Parameters
+        ----------
+        fn as str
+
+        Returns
+        -------
+        CSVFormatPose, EstimationErrorType, RotationErrorRepresentationType
+        """
         if os.path.exists(fn):
+            assert(isinstance(fn, str))
             with open(fn, "r") as file:
                 header = str(file.readline()).rstrip("\n\r")
                 for fmt in CSVFormatPose.list():
-                    h_ = ",".join(CSVFormatPose.get_header(fmt))
-                    if h_.replace(" ", "") == header.replace(" ", ""):
-                        return CSVFormatPose(fmt)
+                    format_type = CSVFormatPose(fmt)
+
+                    # iterate through the error types only if the format contains a covariance
+                    if format_type.has_uncertainty():
+                        for est_err_str in EstimationErrorType.list():
+                            est_err_type = EstimationErrorType(est_err_str)
+                            for rot_err_str in RotationErrorRepresentationType.list():
+                                rot_err_type = RotationErrorRepresentationType(rot_err_str)
+                                h_ = ",".join(CSVFormatPose.get_header(fmt, est_err_type, rot_err_type))
+                                if h_.replace(" ", "") == header.replace(" ", ""):
+                                    return format_type, est_err_type, rot_err_type
+                    else:
+                        h_ = ",".join(CSVFormatPose.get_header(fmt, EstimationErrorType.none,
+                                                               RotationErrorRepresentationType.none))
+                        if h_.replace(" ", "") == header.replace(" ", ""):
+                            return format_type, EstimationErrorType.none, RotationErrorRepresentationType.none
+
                 print("CSVFormatPose.identify_format(): Header unknown!\n\t[" + str(header) + "]")
         else:
             print("CSVFormatPose.identify_format(): File not found!\n\t[" + str(fn) + "]")
-        return CSVFormatPose.none
+        return CSVFormatPose.none, EstimationErrorType.none, RotationErrorRepresentationType.none
 
 

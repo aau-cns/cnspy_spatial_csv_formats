@@ -19,13 +19,13 @@
 ########################################################################################################################
 import os
 from enum import Enum
-from cnspy_spatial_csv_formats.CSVFormatPose import CSVFormatPose
+from cnspy_spatial_csv_formats.CSVSpatialFormatType import CSVSpatialFormatType
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationErrorRepresentationType
 
 
 class CSVSpatialFormat:
-    csv_format = CSVFormatPose.none
+    csv_format = CSVSpatialFormatType.none
     estimation_error_type = EstimationErrorType.none
     rotation_error_representation = RotationErrorRepresentationType.none
 
@@ -38,9 +38,9 @@ class CSVSpatialFormat:
             self.rotation_error_representation = rot_err_type
 
     def get_header(self):
-        return CSVFormatPose.get_header(self.csv_format, self.estimation_error_type, self.rotation_error_representation)
+        return CSVSpatialFormatType.get_header(self.csv_format, self.estimation_error_type, self.rotation_error_representation)
 
     @staticmethod
     def identify_format(fn):
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(fn=fn)
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(fn=fn)
         return CSVSpatialFormat(fmt, est_err_type=est_err, rot_err_type=rot_err)

@@ -19,7 +19,7 @@
 ########################################################################################################################
 import os
 import unittest
-from cnspy_spatial_csv_formats.CSVFormatPose import CSVFormatPose
+from cnspy_spatial_csv_formats.CSVSpatialFormatType import CSVSpatialFormatType
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationErrorRepresentationType
 
@@ -29,54 +29,54 @@ class CSVFormat_Test(unittest.TestCase):
     def test_header(self):
         print('TUM CSV header:')
 
-        for type in CSVFormatPose.list():
-            print(str(CSVFormatPose.get_header(type)))
+        for type in CSVSpatialFormatType.list():
+            print(str(CSVSpatialFormatType.get_header(type)))
 
     def test_get_format(self):
         print('TUM CSV get_format:')
 
-        for type in CSVFormatPose.list():
-            print(str(CSVFormatPose.get_format(type)))
+        for type in CSVSpatialFormatType.list():
+            print(str(CSVSpatialFormatType.get_format(type)))
 
     def test_identify(self):
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-err.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-err.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.TUM)
+        self.assertTrue(fmt == CSVSpatialFormatType.TUM)
         self.assertTrue(est_err == EstimationErrorType.none)
         self.assertTrue(rot_err == RotationErrorRepresentationType.none)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.PosOrientWithCov)
+        self.assertTrue(fmt == CSVSpatialFormatType.PosOrientWithCov)
         self.assertTrue(est_err == EstimationErrorType.none)
         self.assertTrue(rot_err == RotationErrorRepresentationType.none)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-gt.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-gt.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.TUM)
+        self.assertTrue(fmt == CSVSpatialFormatType.TUM)
         self.assertTrue(est_err == EstimationErrorType.none)
         self.assertTrue(rot_err == RotationErrorRepresentationType.none)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/example_eval.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/example_eval.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.none)
+        self.assertTrue(fmt == CSVSpatialFormatType.none)
         self.assertTrue(est_err == EstimationErrorType.none)
         self.assertTrue(rot_err == RotationErrorRepresentationType.none)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/212341234.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/212341234.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.none)
+        self.assertTrue(fmt == CSVSpatialFormatType.none)
         self.assertTrue(est_err == EstimationErrorType.none)
         self.assertTrue(rot_err == RotationErrorRepresentationType.none)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/t_est.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/t_est.csv'))
         print('identify_format:' + str(fmt))
-        self.assertTrue(fmt == CSVFormatPose.Timestamp)
+        self.assertTrue(fmt == CSVSpatialFormatType.Timestamp)
         self.assertTrue(est_err == EstimationErrorType.none)
         self.assertTrue(rot_err == RotationErrorRepresentationType.none)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov-type1-thetaR.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov-type1-thetaR.csv'))
         print('identify_format:' + str(fmt) + ' est error: ' + str(est_err) + ' rot error: ' + str(rot_err))
-        self.assertTrue(fmt == CSVFormatPose.PosOrientWithCov)
+        self.assertTrue(fmt == CSVSpatialFormatType.PosOrientWithCov)
         self.assertTrue(est_err == EstimationErrorType.type1)
         self.assertTrue(rot_err == RotationErrorRepresentationType.R_small_theta)
-        fmt, est_err, rot_err = CSVFormatPose.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov-type2-thetaq.csv'))
+        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(str(SAMPLE_DATA_DIR + '/ID1-pose-est-cov-type2-thetaq.csv'))
         print('identify_format:' + str(fmt) + ' est error: ' + str(est_err) + ' rot error: ' + str(rot_err))
-        self.assertTrue(fmt == CSVFormatPose.PosOrientWithCov)
+        self.assertTrue(fmt == CSVSpatialFormatType.PosOrientWithCov)
         self.assertTrue(est_err == EstimationErrorType.type2)
         self.assertTrue(rot_err == RotationErrorRepresentationType.q_small_theta)
 

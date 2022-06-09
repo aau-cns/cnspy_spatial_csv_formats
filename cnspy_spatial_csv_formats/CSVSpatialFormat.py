@@ -21,7 +21,7 @@ import os
 from enum import Enum
 from cnspy_spatial_csv_formats.CSVSpatialFormatType import CSVSpatialFormatType
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
-from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationErrorRepresentationType
+from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentationType
 
 # TODOs
 # - TODO: replace usages of CSVSpatialFormatType by CSVSpatialFormat
@@ -30,15 +30,15 @@ from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationEr
 class CSVSpatialFormat:
     type = CSVSpatialFormatType.none
     estimation_error_type = EstimationErrorType.none
-    rotation_error_representation = RotationErrorRepresentationType.none
+    rotation_error_representation = ErrorRepresentationType.none
 
-    def __init__(self, fmt_type=None, est_err_type=None, rot_err_type= None):
+    def __init__(self, fmt_type=None, est_err_type=None, err_rep_type= None):
         if fmt_type is not None:
             self.type = fmt_type
         if est_err_type is not None:
             self.estimation_error_type = est_err_type
-        if rot_err_type is not None:
-            self.rotation_error_representation = rot_err_type
+        if err_rep_type is not None:
+            self.rotation_error_representation = err_rep_type
 
     def get_header(self):
         return CSVSpatialFormatType.get_header(self.type, self.estimation_error_type, self.rotation_error_representation)
@@ -48,5 +48,5 @@ class CSVSpatialFormat:
 
     @staticmethod
     def identify_format(fn):
-        fmt, est_err, rot_err = CSVSpatialFormatType.identify_format(fn=fn)
-        return CSVSpatialFormat(fmt, est_err_type=est_err, rot_err_type=rot_err)
+        fmt, est_err, err_rep_type = CSVSpatialFormatType.identify_format(fn=fn)
+        return CSVSpatialFormat(fmt, est_err_type=est_err, err_rep_type=err_rep_type)

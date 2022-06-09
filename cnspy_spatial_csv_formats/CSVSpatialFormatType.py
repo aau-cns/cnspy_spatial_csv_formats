@@ -21,7 +21,7 @@ import os
 from enum import Enum
 import cnspy_spatial_csv_formats.PoseStructs as ps
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
-from cnspy_spatial_csv_formats.RotationErrorRepresentationType import RotationErrorRepresentationType
+from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentationType
 
 
 # TODOs
@@ -54,29 +54,29 @@ class CSVSpatialFormatType(Enum):
                      str(CSVSpatialFormatType.none)])
 
     @staticmethod
-    def get_header(fmt, est_err_type=EstimationErrorType.none, rot_err_rep=RotationErrorRepresentationType.none):
+    def get_header(fmt, est_err_type=EstimationErrorType.none, err_rep=ErrorRepresentationType.none):
         assert (isinstance(est_err_type, EstimationErrorType))
-        assert (isinstance(rot_err_rep, RotationErrorRepresentationType))
+        assert (isinstance(err_rep, ErrorRepresentationType))
         if str(fmt) == 'Timestamp' and est_err_type is EstimationErrorType.none and \
-                rot_err_rep is RotationErrorRepresentationType.none:
+                err_rep is ErrorRepresentationType.none:
             return ['#t']
         elif str(fmt) == 'TUM' and est_err_type is EstimationErrorType.none and \
-                rot_err_rep is RotationErrorRepresentationType.none:
+                err_rep is ErrorRepresentationType.none:
             return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
         elif str(fmt) == 'PositionStamped' and est_err_type is EstimationErrorType.none and \
-                rot_err_rep is RotationErrorRepresentationType.none:
+                err_rep is ErrorRepresentationType.none:
             return ['#t', 'tx', 'ty', 'tz']
         elif str(fmt) == 'PosOrientCov':
             elems = ['#t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
-            if est_err_type is not EstimationErrorType.none or rot_err_rep is not RotationErrorRepresentationType.none:
-                return elems + [str(est_err_type), str(rot_err_rep)]
+            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
+                return elems + [str(est_err_type), str(err_rep)]
             else:
                 return elems
         elif str(fmt) == 'PosOrientWithCov':
             elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
-            if est_err_type is not EstimationErrorType.none or rot_err_rep is not RotationErrorRepresentationType.none:
-                return elems + [str(est_err_type), str(rot_err_rep)]
+            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
+                return elems + [str(est_err_type), str(err_rep)]
             else:
                 return elems
 
@@ -141,7 +141,7 @@ class CSVSpatialFormatType(Enum):
 
         Returns
         -------
-        CSVSpatialFormatType, EstimationErrorType, RotationErrorRepresentationType
+        CSVSpatialFormatType, EstimationErrorType, ErrorRepresentationType
         """
         if os.path.exists(fn):
             assert(isinstance(fn, str))
@@ -154,20 +154,20 @@ class CSVSpatialFormatType(Enum):
                     if format_type.has_uncertainty():
                         for est_err_str in EstimationErrorType.list():
                             est_err_type = EstimationErrorType(est_err_str)
-                            for rot_err_str in RotationErrorRepresentationType.list():
-                                rot_err_type = RotationErrorRepresentationType(rot_err_str)
-                                h_ = ",".join(CSVSpatialFormatType.get_header(fmt, est_err_type, rot_err_type))
+                            for err_str in ErrorRepresentationType.list():
+                                err_type = ErrorRepresentationType(err_str)
+                                h_ = ",".join(CSVSpatialFormatType.get_header(fmt, est_err_type, err_type))
                                 if h_.replace(" ", "") == header.replace(" ", ""):
-                                    return format_type, est_err_type, rot_err_type
+                                    return format_type, est_err_type, err_type
                     else:
                         h_ = ",".join(CSVSpatialFormatType.get_header(fmt, EstimationErrorType.none,
-                                                                      RotationErrorRepresentationType.none))
+                                                                      ErrorRepresentationType.none))
                         if h_.replace(" ", "") == header.replace(" ", ""):
-                            return format_type, EstimationErrorType.none, RotationErrorRepresentationType.none
+                            return format_type, EstimationErrorType.none, ErrorRepresentationType.none
 
                 print("CSVSpatialFormatType.identify_format(): Header unknown!\n\t[" + str(header) + "]")
         else:
             print("CSVSpatialFormatType.identify_format(): File not found!\n\t[" + str(fn) + "]")
-        return CSVSpatialFormatType.none, EstimationErrorType.none, RotationErrorRepresentationType.none
+        return CSVSpatialFormatType.none, EstimationErrorType.none, ErrorRepresentationType.none
 
 

@@ -20,10 +20,11 @@
 from enum import Enum
 
 # Please refer to "Error definitions and filter credibility evaluation", Jung and Weiss, 2022
-class RotationErrorRepresentationType(Enum):
+class ErrorRepresentationType(Enum):
     R_small_theta = 'R_small_theta'  # R ~ eye(3) + skew(theta_R)
     q_small_theta = 'q_small_theta'  # q ~ [1; 0.5 theta_q]
     so3_theta = 'so3_theta'          # R = exp(skew(theta))
+    se3_tau = 'se3_tau'              # P = exp(skew([v;theta]))
     rpy_degree = 'rpy_degree'        # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [deg]
     rpy_rad = 'rpy_rad'              # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [rad]
     none = 'none'
@@ -34,8 +35,8 @@ class RotationErrorRepresentationType(Enum):
 
     @staticmethod
     def list():
-        return list([str(RotationErrorRepresentationType.R_small_theta),
-                     str(RotationErrorRepresentationType.q_small_theta),
-                     str(RotationErrorRepresentationType.rpy_degree),
-                     str(RotationErrorRepresentationType.rpy_rad),
-                     str(RotationErrorRepresentationType.none)])
+        return list([str(ErrorRepresentationType.R_small_theta),
+                     str(ErrorRepresentationType.q_small_theta),
+                     str(ErrorRepresentationType.rpy_degree),
+                     str(ErrorRepresentationType.rpy_rad),
+                     str(ErrorRepresentationType.none)])

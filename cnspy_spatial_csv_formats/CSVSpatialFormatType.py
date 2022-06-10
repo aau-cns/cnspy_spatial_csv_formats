@@ -88,8 +88,12 @@ class CSVSpatialFormatType(Enum):
             # a  for roll (r)
             # b  for pitch (p)
             # c  for yaw (y - is already used for y-position of the frame)
-            elems = ['#t', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
-                     'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+            elems = ['#t', 'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
+                     'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
+                     'Tzz', 'Tza', 'Tzb', 'Tzc',
+                     'Taa', 'Tab', 'Tac',
+                     'Tbb', 'Tbc',
+                     'Tcc']
             if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
                 return elems + [str(est_err_type), str(err_rep)]
             else:
@@ -99,8 +103,13 @@ class CSVSpatialFormatType(Enum):
             # a  for roll (r)
             # b  for pitch (p)
             # c  for yaw (y - is already used for y-position of the frame)
-            elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
-                     'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+            elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw',
+                     'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
+                     'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
+                     'Tzz', 'Tza', 'Tzb', 'Tzc',
+                     'Taa', 'Tab', 'Tac',
+                     'Tbb', 'Tbc',
+                     'Tcc']
             if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
                 return elems + [str(est_err_type), str(err_rep)]
             else:
@@ -123,11 +132,20 @@ class CSVSpatialFormatType(Enum):
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
         elif str(fmt) == 'PoseCov':
-            return ['t', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
-                    'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+            return ['t', 'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
+                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyb',
+                    'Tzz', 'Tza', 'Tzb', 'Tzc',
+                    'Taa', 'Tab', 'Tac',
+                    'Tbb', 'Tbc',
+                    'Tcc']
         elif str(fmt) == 'PoseWithCov':
-            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'Txx', 'Txy', 'Txz', 'Tyy', 'Tyz', 'Tzz', 'Taa',
-                    'Tab', 'Tac', 'Tbb', 'Tbc', 'Tcc', 'Txa', 'Txb', 'Txc', 'Tya', 'Tyb', 'Tyc', 'Tza', 'Tzb', 'Tzc']
+            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw',
+                    'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
+                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyb',
+                    'Tzz', 'Tza', 'Tzb', 'Tzc',
+                    'Taa', 'Tab', 'Tac',
+                    'Tbb', 'Tbc',
+                    'Tcc']
 
         else:
             return ['no format']

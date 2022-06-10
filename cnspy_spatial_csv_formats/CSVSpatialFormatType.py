@@ -133,7 +133,7 @@ class CSVSpatialFormatType(Enum):
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
         elif str(fmt) == 'PoseCov':
             return ['t', 'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
-                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyb',
+                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
                     'Tzz', 'Tza', 'Tzb', 'Tzc',
                     'Taa', 'Tab', 'Tac',
                     'Tbb', 'Tbc',
@@ -141,7 +141,7 @@ class CSVSpatialFormatType(Enum):
         elif str(fmt) == 'PoseWithCov':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw',
                     'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
-                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyb',
+                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
                     'Tzz', 'Tza', 'Tzb', 'Tzc',
                     'Taa', 'Tab', 'Tac',
                     'Tbb', 'Tbc',

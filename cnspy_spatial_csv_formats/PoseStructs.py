@@ -20,8 +20,7 @@
 ########################################################################################################################
 
 # TODOs:
-# - TODO: Pose covariance would require correlations between position and orientation as well. Thus current PoseCov is rather a Pos+Orient Covariance
-# - TODO: maybe switch from JPL to Hammilton quaternion order
+# - TODO: maybe switch from JPL to Hammilton quaternion order -> no because of backward compatibility
 class sTimestamp:
     def __init__(self, vec=None):
         assert (len(vec) == 1)

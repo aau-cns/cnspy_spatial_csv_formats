@@ -23,9 +23,6 @@ from cnspy_spatial_csv_formats.CSVSpatialFormatType import CSVSpatialFormatType
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentationType
 
-# TODOs
-# - TODO: replace usages of CSVSpatialFormatType by CSVSpatialFormat
-
 
 class CSVSpatialFormat:
     type = CSVSpatialFormatType.none

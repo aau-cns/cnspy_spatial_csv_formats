@@ -24,9 +24,6 @@ from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentationType
 
 
-# TODOs
-# - TODO: introduce PoseCov and PoseWithCov -> also in conversion ROSbag2CSV
-
 class CSVSpatialFormatType(Enum):
     Timestamp = 'Timestamp'
     TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
@@ -216,12 +213,15 @@ class CSVSpatialFormatType(Enum):
                             for err_str in ErrorRepresentationType.list():
                                 err_type = ErrorRepresentationType(err_str)
                                 h_ = ",".join(CSVSpatialFormatType.get_header(fmt, est_err_type, err_type))
-                                if h_.replace(" ", "") == header.replace(" ", ""):
+
+                                # ignore white-spaces and header indicators '#'
+                                if h_.replace(" ", "").replace("#", "") == header.replace(" ", "").replace("#", ""):
                                     return format_type, est_err_type, err_type
                     else:
                         h_ = ",".join(CSVSpatialFormatType.get_header(fmt, EstimationErrorType.none,
                                                                       ErrorRepresentationType.none))
-                        if h_.replace(" ", "") == header.replace(" ", ""):
+                        # ignore white-spaces and header indicators '#'
+                        if h_.replace(" ", "").replace("#", "") == header.replace(" ", "").replace("#", ""):
                             return format_type, EstimationErrorType.none, ErrorRepresentationType.none
 
                 print("CSVSpatialFormatType.identify_format(): Header unknown!\n\t[" + str(header) + "]")

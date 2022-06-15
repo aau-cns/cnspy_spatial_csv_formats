@@ -30,11 +30,11 @@ class CSVSpatialFormat:
     rotation_error_representation = ErrorRepresentationType.none
 
     def __init__(self, fmt_type=None, est_err_type=None, err_rep_type= None):
-        if fmt_type is not None:
+        if fmt_type is not None and isinstance(fmt_type, CSVSpatialFormatType):
             self.type = fmt_type
-        if est_err_type is not None:
+        if est_err_type is not None and isinstance(est_err_type, EstimationErrorType):
             self.estimation_error_type = est_err_type
-        if err_rep_type is not None:
+        if err_rep_type is not None and isinstance(err_rep_type, ErrorRepresentationType):
             self.rotation_error_representation = err_rep_type
 
     def get_header(self):

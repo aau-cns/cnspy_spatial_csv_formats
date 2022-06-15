@@ -23,9 +23,9 @@ import cnspy_spatial_csv_formats.PoseStructs as ps
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentationType
 
-# TODO: adding additional info to the format header was a bad idea, as it breaks compatibility!
-#  Make *CovTyped formats instead
-#
+# Primary loader for CSV files via Pandas.read_csv():
+#  -  '#' are comments and first line after comment defines variable names!
+#  -  Thus the 'TUM' format is not compatible and needs special treatment
 class CSVSpatialFormatType(Enum):
     Timestamp = 'Timestamp'
     PoseStamped = 'PoseStamped'
@@ -138,24 +138,33 @@ class CSVSpatialFormatType(Enum):
         elif str(fmt) == 'PosOrientWithCov' or len(elems) == 20:
             return ps.sTUMPosOrientWithCovStamped(vec=[float(x) for x in elems[0:20]])
         elif str(fmt) == 'PosOrientWithCovTyped' or len(elems) == 22:
-            return ps.sTUMPosOrientWithCovStampedTyped(vec=[float(x) for x in elems[0:22]])
+            return ps.sTUMPosOrientWithCovStampedTyped(vec=[float(x) for x in elems[0:20]],
+                                                       est_type=elems[20], err_repr=elems[21])
         elif str(fmt) == 'PoseCov' or len(elems) == 22:
             return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:22]])
         elif str(fmt) == 'PoseWithCov' or len(elems) == 29:
             return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems[0:29]])
         elif str(fmt) == 'PoseWithCovTyped' or len(elems) == 31:
-            return ps.sTUMPoseWithCovStampedTyped(vec=[float(x) for x in elems[0:31]])
+            return ps.sTUMPoseWithCovStampedTyped(vec=[float(x) for x in elems[0:29]],
+                                                  est_type=elems[29], err_repr=elems[30])
         else:
             return None
 
     @staticmethod
     def header_to_format_type(header):
+        header.replace(" ", "")
+        header_parts = header.split(',')
         for fmt in CSVSpatialFormatType.list():
             format_type = CSVSpatialFormatType(fmt)
-            h_ = ",".join(CSVSpatialFormatType.get_header(fmt))
+            # h_ = ",".join(CSVSpatialFormatType.get_header(fmt))
+            h_parts = CSVSpatialFormatType.get_header(fmt)
 
-            if h_.replace(" ", "") == header.replace(" ", "").replace("#", ""):
-                return format_type
+            if len(header_parts) == len(h_parts):
+                common = set(header_parts) & set(h_parts)
+                if len(common) == len(header_parts):
+                    return format_type
+
+        return CSVSpatialFormatType.none
 
     @staticmethod
     def identify_format(fn):
@@ -163,14 +172,10 @@ class CSVSpatialFormatType(Enum):
             assert(isinstance(fn, str))
             with open(fn, "r") as file:
                 header = str(file.readline()).rstrip("\n\r")
-                for fmt in CSVSpatialFormatType.list():
-                    format_type = CSVSpatialFormatType(fmt)
-                    h_ = ",".join(CSVSpatialFormatType.get_header(fmt))
-
-                    if h_.replace(" ", "") == header.replace(" ", "").replace("#", ""):
-                        return format_type
-
-                print("CSVSpatialFormatType.identify_format(): Header unknown!\n\t[" + str(header) + "]")
+                fmt = CSVSpatialFormatType.header_to_format_type(header)
+                if fmt == CSVSpatialFormatType.none:
+                    print("CSVSpatialFormatType.identify_format(): Header unknown!\n\t[" + str(header) + "]")
+                return fmt
         else:
             print("CSVSpatialFormatType.identify_format(): File not found!\n\t[" + str(fn) + "]")
         return CSVSpatialFormatType.none

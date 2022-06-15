@@ -23,15 +23,20 @@ import cnspy_spatial_csv_formats.PoseStructs as ps
 from cnspy_spatial_csv_formats.EstimationErrorType import EstimationErrorType
 from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentationType
 
-
+# TODO: adding additional info to the format header was a bad idea, as it breaks compatibility!
+#  Make *CovTyped formats instead
+#
 class CSVSpatialFormatType(Enum):
     Timestamp = 'Timestamp'
+    PoseStamped = 'PoseStamped'
     TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
     PositionStamped = 'PositionStamped'
     PosOrientCov = 'PosOrientCov'
     PosOrientWithCov = 'PosOrientWithCov'
+    PosOrientWithCovTyped = 'PosOrientWithCovTyped'
     PoseCov = 'PoseCov'
     PoseWithCov = 'PoseWithCov'
+    PoseWithCovTyped = 'PoseWithCovTyped'
     none = 'none'
     # HINT: if you add an entry here, please also add it to the .list() + .has_uncertainty method!
 
@@ -46,80 +51,29 @@ class CSVSpatialFormatType(Enum):
     @staticmethod
     def list():
         return list([str(CSVSpatialFormatType.Timestamp),
+                     str(CSVSpatialFormatType.PoseStamped),
                      str(CSVSpatialFormatType.TUM),
                      str(CSVSpatialFormatType.PositionStamped),
                      str(CSVSpatialFormatType.PosOrientCov),
                      str(CSVSpatialFormatType.PosOrientWithCov),
+                     str(CSVSpatialFormatType.PosOrientWithCovTyped),
                      str(CSVSpatialFormatType.PoseCov),
                      str(CSVSpatialFormatType.PoseWithCov),
+                     str(CSVSpatialFormatType.PoseWithCovTyped),
                      str(CSVSpatialFormatType.none)])
 
     @staticmethod
-    def get_header(fmt, est_err_type=EstimationErrorType.none, err_rep=ErrorRepresentationType.none):
-        assert (isinstance(est_err_type, EstimationErrorType))
-        assert (isinstance(err_rep, ErrorRepresentationType))
-        if str(fmt) == 'Timestamp' and est_err_type is EstimationErrorType.none and \
-                err_rep is ErrorRepresentationType.none:
-            return ['#t']
-        elif str(fmt) == 'TUM' and est_err_type is EstimationErrorType.none and \
-                err_rep is ErrorRepresentationType.none:
+    def get_header(fmt):
+        if str(fmt) == 'TUM':
             return ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
-        elif str(fmt) == 'PositionStamped' and est_err_type is EstimationErrorType.none and \
-                err_rep is ErrorRepresentationType.none:
-            return ['#t', 'tx', 'ty', 'tz']
-        elif str(fmt) == 'PosOrientCov':
-            elems = ['#t', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr', 'qrp', 'qry', 'qpp', 'qpy', 'qyy']
-            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
-                return elems + [str(est_err_type), str(err_rep)]
-            else:
-                return elems
-        elif str(fmt) == 'PosOrientWithCov':
-            elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
-                    'qrp', 'qry', 'qpp', 'qpy', 'qyy']
-            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
-                return elems + [str(est_err_type), str(err_rep)]
-            else:
-                return elems
-        elif str(fmt) == 'PoseCov':
-            # R = Rz(y/c)Ry(b/p)Rx(r/a)
-            # a  for roll (r)
-            # b  for pitch (p)
-            # c  for yaw (y - is already used for y-position of the frame)
-            elems = ['#t', 'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
-                     'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
-                     'Tzz', 'Tza', 'Tzb', 'Tzc',
-                     'Taa', 'Tab', 'Tac',
-                     'Tbb', 'Tbc',
-                     'Tcc']
-            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
-                return elems + [str(est_err_type), str(err_rep)]
-            else:
-                return elems
-        elif str(fmt) == 'PoseWithCov':
-            # R = Rz(y/c)Ry(b/p)Rx(r/a)
-            # a  for roll (r)
-            # b  for pitch (p)
-            # c  for yaw (y - is already used for y-position of the frame)
-            elems = ['#t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw',
-                     'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
-                     'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
-                     'Tzz', 'Tza', 'Tzb', 'Tzc',
-                     'Taa', 'Tab', 'Tac',
-                     'Tbb', 'Tbc',
-                     'Tcc']
-            if est_err_type is not EstimationErrorType.none or err_rep is not ErrorRepresentationType.none:
-                return elems + [str(est_err_type), str(err_rep)]
-            else:
-                return elems
-
         else:
-            return ["# no header "]
+            return CSVSpatialFormatType.get_format(fmt)
 
     @staticmethod
     def get_format(fmt):
         if str(fmt) == 'Timestamp':
             return ['t']
-        elif str(fmt) == 'TUM':
+        elif str(fmt) == 'TUM' or str(fmt) == 'PoseStamped':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
         elif str(fmt) == 'PositionStamped':
             return ['t', 'tx', 'ty', 'tz']
@@ -128,7 +82,14 @@ class CSVSpatialFormatType(Enum):
         elif str(fmt) == 'PosOrientWithCov':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
                     'qrp', 'qry', 'qpp', 'qpy', 'qyy']
+        elif str(fmt) == 'PosOrientWithCovTyped':
+            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'pxx', 'pxy', 'pxz', 'pyy', 'pyz', 'pzz', 'qrr',
+                    'qrp', 'qry', 'qpp', 'qpy', 'qyy', 'est_err_type', 'err_representation']
         elif str(fmt) == 'PoseCov':
+            # R = Rz(y/c)Ry(b/p)Rx(r/a)
+            # a  for roll (r)
+            # b  for pitch (p)
+            # c  for yaw (y - is already used for y-position of the frame)
             return ['t', 'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
                     'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
                     'Tzz', 'Tza', 'Tzb', 'Tzc',
@@ -136,6 +97,10 @@ class CSVSpatialFormatType(Enum):
                     'Tbb', 'Tbc',
                     'Tcc']
         elif str(fmt) == 'PoseWithCov':
+            # R = Rz(y/c)Ry(b/p)Rx(r/a)
+            # a  for roll (r)
+            # b  for pitch (p)
+            # c  for yaw (y - is already used for y-position of the frame)
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw',
                     'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
                     'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
@@ -143,90 +108,71 @@ class CSVSpatialFormatType(Enum):
                     'Taa', 'Tab', 'Tac',
                     'Tbb', 'Tbc',
                     'Tcc']
-
+        elif str(fmt) == 'PoseWithCovTyped':
+            # R = Rz(y/c)Ry(b/p)Rx(r/a)
+            # a  for roll (r)
+            # b  for pitch (p)
+            # c  for yaw (y - is already used for y-position of the frame)
+            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw',
+                    'Txx', 'Txy', 'Txz', 'Txa', 'Txb', 'Txc',
+                    'Tyy', 'Tyz', 'Tya', 'Tyb', 'Tyc',
+                    'Tzz', 'Tza', 'Tzb', 'Tzc',
+                    'Taa', 'Tab', 'Tac',
+                    'Tbb', 'Tbc',
+                    'Tcc',
+                    'est_err_type', 'err_representation']
         else:
             return ['no format']
-
-    @staticmethod
-    def get_num_elem(fmt):
-
-        if str(fmt) == 'Timestamp':
-            return 1
-        elif str(fmt) == 'TUM':
-            return 8
-        elif str(fmt) == 'PositionStamped':
-            return 4
-        elif str(fmt) == 'PosOrientCov':
-            return 13
-        elif str(fmt) == 'PosOrientWithCov':
-            return 20
-        elif str(fmt) == 'PoseCov':
-            return 22
-        elif str(fmt) == 'PoseWithCov':
-            return 29
-        else:
-            return None
 
     @staticmethod
     def parse(line, fmt):
         elems = line.split(",")
         if str(fmt) == 'Timestamp' or len(elems) == 1:
             return ps.sTimestamp(vec=[float(x) for x in elems[0:1]])
-        elif str(fmt) == 'TUM' or len(elems) == 8:
+        elif str(fmt) == 'TUM' or str(fmt) == 'PoseStamped' or len(elems) == 8:
             return ps.sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
         elif str(fmt) == 'PositionStamped' or len(elems) == 4:
             return ps.sPositionStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PosOrientCov' or len(elems) == 13:
             return ps.sPosOrientCovStamped(vec=[float(x) for x in elems[0:13]])
         elif str(fmt) == 'PosOrientWithCov' or len(elems) == 20:
-            return ps.sTUMPosOrientWithCovStamped(vec=[float(x) for x in elems])
+            return ps.sTUMPosOrientWithCovStamped(vec=[float(x) for x in elems[0:20]])
+        elif str(fmt) == 'PosOrientWithCovTyped' or len(elems) == 22:
+            return ps.sTUMPosOrientWithCovStampedTyped(vec=[float(x) for x in elems[0:22]])
         elif str(fmt) == 'PoseCov' or len(elems) == 22:
-            return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:13]])
+            return ps.sPoseCovStamped(vec=[float(x) for x in elems[0:22]])
         elif str(fmt) == 'PoseWithCov' or len(elems) == 29:
-            return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems])
+            return ps.sTUMPoseWithCovStamped(vec=[float(x) for x in elems[0:29]])
+        elif str(fmt) == 'PoseWithCovTyped' or len(elems) == 31:
+            return ps.sTUMPoseWithCovStampedTyped(vec=[float(x) for x in elems[0:31]])
         else:
             return None
 
     @staticmethod
+    def header_to_format_type(header):
+        for fmt in CSVSpatialFormatType.list():
+            format_type = CSVSpatialFormatType(fmt)
+            h_ = ",".join(CSVSpatialFormatType.get_header(fmt))
+
+            if h_.replace(" ", "") == header.replace(" ", "").replace("#", ""):
+                return format_type
+
+    @staticmethod
     def identify_format(fn):
-        """
-
-        Parameters
-        ----------
-        fn as str
-
-        Returns
-        -------
-        CSVSpatialFormatType, EstimationErrorType, ErrorRepresentationType
-        """
         if os.path.exists(fn):
             assert(isinstance(fn, str))
             with open(fn, "r") as file:
                 header = str(file.readline()).rstrip("\n\r")
                 for fmt in CSVSpatialFormatType.list():
                     format_type = CSVSpatialFormatType(fmt)
+                    h_ = ",".join(CSVSpatialFormatType.get_header(fmt))
 
-                    # iterate through the error types only if the format contains a covariance
-                    if format_type.has_uncertainty():
-                        for est_err_str in EstimationErrorType.list():
-                            est_err_type = EstimationErrorType(est_err_str)
-                            for err_str in ErrorRepresentationType.list():
-                                err_type = ErrorRepresentationType(err_str)
-                                h_ = ",".join(CSVSpatialFormatType.get_header(fmt, est_err_type, err_type))
-
-                                # ignore white-spaces and header indicators '#'
-                                if h_.replace(" ", "").replace("#", "") == header.replace(" ", "").replace("#", ""):
-                                    return format_type, est_err_type, err_type
-                    else:
-                        h_ = ",".join(CSVSpatialFormatType.get_header(fmt, EstimationErrorType.none,
-                                                                      ErrorRepresentationType.none))
-                        # ignore white-spaces and header indicators '#'
-                        if h_.replace(" ", "").replace("#", "") == header.replace(" ", "").replace("#", ""):
-                            return format_type, EstimationErrorType.none, ErrorRepresentationType.none
+                    if h_.replace(" ", "") == header.replace(" ", "").replace("#", ""):
+                        return format_type
 
                 print("CSVSpatialFormatType.identify_format(): Header unknown!\n\t[" + str(header) + "]")
         else:
             print("CSVSpatialFormatType.identify_format(): File not found!\n\t[" + str(fn) + "]")
-        return CSVSpatialFormatType.none, EstimationErrorType.none, ErrorRepresentationType.none
+        return CSVSpatialFormatType.none
 
 

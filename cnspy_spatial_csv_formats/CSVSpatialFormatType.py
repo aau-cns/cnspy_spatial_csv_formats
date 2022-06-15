@@ -126,7 +126,7 @@ class CSVSpatialFormatType(Enum):
                     'Tcc',
                     'est_err_type', 'err_representation']
         elif str(fmt) == 'PoseTypedStamped':
-            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'est_err_type']
+            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'scale', 'est_err_type']
         elif str(fmt) == 'PoseErrorStamped':
             return ['t', 'nu_x', 'nu_y', 'nu_z', 'theta_x', 'theta_y', 'theta_z', 'est_err_type', 'err_representation']
         else:

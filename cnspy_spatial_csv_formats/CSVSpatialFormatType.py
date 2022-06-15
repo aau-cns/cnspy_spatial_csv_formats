@@ -37,6 +37,8 @@ class CSVSpatialFormatType(Enum):
     PoseCov = 'PoseCov'
     PoseWithCov = 'PoseWithCov'
     PoseWithCovTyped = 'PoseWithCovTyped'
+    PoseErrorStamped = 'PoseErrorStamped'
+    PoseTypedStamped = 'PoseTypedStamped'
     none = 'none'
     # HINT: if you add an entry here, please also add it to the .list() + .has_uncertainty method!
 
@@ -60,6 +62,8 @@ class CSVSpatialFormatType(Enum):
                      str(CSVSpatialFormatType.PoseCov),
                      str(CSVSpatialFormatType.PoseWithCov),
                      str(CSVSpatialFormatType.PoseWithCovTyped),
+                     str(CSVSpatialFormatType.PoseErrorStamped),
+                     str(CSVSpatialFormatType.PoseTypedStamped),
                      str(CSVSpatialFormatType.none)])
 
     @staticmethod
@@ -121,6 +125,10 @@ class CSVSpatialFormatType(Enum):
                     'Tbb', 'Tbc',
                     'Tcc',
                     'est_err_type', 'err_representation']
+        elif str(fmt) == 'PoseTypedStamped':
+            return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw', 'est_err_type']
+        elif str(fmt) == 'PoseErrorStamped':
+            return ['t', 'nu_x', 'nu_y', 'nu_z', 'theta_x', 'theta_y', 'theta_z', 'est_err_type', 'err_representation']
         else:
             return ['no format']
 

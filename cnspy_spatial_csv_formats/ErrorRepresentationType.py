@@ -22,10 +22,10 @@ from enum import Enum
 
 # Please refer to "Error definitions and filter credibility evaluation", Jung and Weiss, 2022
 class ErrorRepresentationType(Enum):
-    R_small_theta = 'R_small_theta'  # R ~ eye(3) + skew(theta_R); if pose: R(3) x SO(3)
-    q_small_theta = 'q_small_theta'  # q ~ [1; 0.5 theta_q]; if pose: R(3) x H
-    so3_theta = 'so3_theta'          # R = exp(skew(theta)); if pose: R(3) x SO(3)
-    se3_tau = 'se3_tau'              # P = exp(skew(tau)); tau = [v;theta]; if pose: SE(3)
+    theta_R = 'theta_R'  # R ~ eye(3) + skew(theta_R); if pose: R(3) x SO(3)
+    theta_q = 'theta_q'  # q ~ [1; 0.5 theta_q]; if pose: R(3) x H
+    theta_so3 = 'theta_so3'          # R = exp(skew(theta)); if pose: R(3) x SO(3)
+    tau_se3 = 'tau_se3'              # P = exp(skew(tau)); tau = [v;theta]; if pose: SE(3)
     rpy_degree = 'rpy_degree'        # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [deg]; if pose: R(3) x SO(3)
     rpy_rad = 'rpy_rad'              # R = Rz(y)*Ry(p)*Rx(r); roll(r),pitch(p),yaw(y) in [rad]; if pose: R(3) x SO(3)
     none = 'none'
@@ -36,10 +36,10 @@ class ErrorRepresentationType(Enum):
 
     @staticmethod
     def list():
-        return list([str(ErrorRepresentationType.R_small_theta),
-                     str(ErrorRepresentationType.q_small_theta),
-                     str(ErrorRepresentationType.so3_theta),
-                     str(ErrorRepresentationType.se3_tau),
+        return list([str(ErrorRepresentationType.theta_R),
+                     str(ErrorRepresentationType.theta_q),
+                     str(ErrorRepresentationType.theta_so3),
+                     str(ErrorRepresentationType.tau_se3),
                      str(ErrorRepresentationType.rpy_degree),
                      str(ErrorRepresentationType.rpy_rad),
                      str(ErrorRepresentationType.none)])

@@ -36,6 +36,9 @@ class EstimationErrorType(Enum):
     def __str__(self):
         return self.value
 
+    def str(self):
+        return str(self.value)
+
     @staticmethod
     def list():
         return list([str(EstimationErrorType.type1),

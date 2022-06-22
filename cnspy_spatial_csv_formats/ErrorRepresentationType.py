@@ -34,6 +34,9 @@ class ErrorRepresentationType(Enum):
     def __str__(self):
         return self.value
 
+    def str(self):
+        return str(self.value)
+    
     @staticmethod
     def list():
         return list([str(ErrorRepresentationType.theta_R),

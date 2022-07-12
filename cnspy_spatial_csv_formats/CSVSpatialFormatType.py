@@ -46,7 +46,9 @@ class CSVSpatialFormatType(Enum):
         return self.value
 
     def has_uncertainty(self):
-        if self == CSVSpatialFormatType.PosOrientCov or self == CSVSpatialFormatType.PosOrientWithCov:
+        if self == CSVSpatialFormatType.PosOrientCov or self == CSVSpatialFormatType.PosOrientWithCov or \
+           self == CSVSpatialFormatType.PoseCov or self == CSVSpatialFormatType.PoseWithCov or \
+           self == CSVSpatialFormatType.PoseWithCovTyped or self == CSVSpatialFormatType.PosOrientWithCovTyped:
             return True
         return False
 

@@ -30,6 +30,10 @@ class EstimationErrorType(Enum):
     # e.g. p_WB_in_W_true = p_WB_in_W_est + p_WB_in_W_err; and  R(q_WB_true) = R(q_WB_est)*R(q_WB_err)
     type6 = 'type6'  #  TRUE = ERR + EST for positions R(3); TRUE = ERR \oplus EST for rotations SO(3);
     # e.g. p_WB_in_W_true = p_WB_in_W_est + p_WB_in_W_err; and R(q_WB_true) = R(q_WB_err)*R(q_WB_est)
+    #type7 = 'type7'  #  TRUE = EST - ERR for positions R(3); TRUE = EST \oplus ERR for rotations SO(3);
+    # e.g. p_WB_in_W_true = p_WB_in_W_est - p_WB_in_W_err; and  R(q_WB_true) = R(q_WB_est)*R(q_WB_err)
+    #type8 = 'type8'  #  TRUE = ERR + EST for positions R(3); TRUE = \ominus ERR \oplus EST for rotations SO(3);
+    # e.g. p_WB_in_W_true = p_WB_in_W_err + p_WB_in_W_est; and R(q_WB_true) = inv(R(q_WB_err))*R(q_WB_est)
     none = 'none'
     # HINT: if you add an entry here, please also add it to the .list() method!
 

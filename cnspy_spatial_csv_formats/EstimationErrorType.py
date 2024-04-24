@@ -26,10 +26,10 @@ class EstimationErrorType(Enum):
     type2 = 'type2'  #  TRUE = ERR \oplus EST; e.g. global pose error from true world to estimated world
     type3 = 'type3'  #  TRUE = EST \ominus ERR; a \ominus b == a \oplus \inv(b); e.g. local pose error from true body to estimated body
     type4 = 'type4'  #  TRUE = ERR \ominus EST; e.g. global pose error from true global to estimated global
-    type5 = 'type5'  #  TRUE = EST + ERR for positions R(3); TRUE = EST \oplus ERR for rotations SO(3);
+    type5 = 'type5'  #  TRUE = EST + ERR for positions R(3); TRUE = EST \oplus ERR for rotations SO(3); global position error, local orientation error;
     # e.g. p_WB_in_W_true = p_WB_in_W_est + p_WB_in_W_err; and  R(q_WB_true) = R(q_WB_est)*R(q_WB_err)
     type6 = 'type6'  #  TRUE = ERR + EST for positions R(3); TRUE = ERR \oplus EST for rotations SO(3);
-    # e.g. p_WB_in_W_true = p_WB_in_W_est + p_WB_in_W_err; and R(q_WB_true) = R(q_WB_err)*R(q_WB_est)
+    # e.g. p_WB_in_W_true = p_WB_in_W_est + p_WB_in_W_err; and R(q_WB_true) = R(q_WB_err)*R(q_WB_est); global position error, global orientation error;
     #type7 = 'type7'  #  TRUE = EST - ERR for positions R(3); TRUE = EST \oplus ERR for rotations SO(3);
     # e.g. p_WB_in_W_true = p_WB_in_W_est - p_WB_in_W_err; and  R(q_WB_true) = R(q_WB_est)*R(q_WB_err)
     #type8 = 'type8'  #  TRUE = ERR + EST for positions R(3); TRUE = \ominus ERR \oplus EST for rotations SO(3);

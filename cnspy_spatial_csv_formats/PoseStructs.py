@@ -21,6 +21,7 @@
 
 # TODOs:
 # - TODO: maybe switch from JPL to Hammilton quaternion order -> no because of backward compatibility
+# - TODO: get rid of PoseStructs use pandas to manage data
 class sTimestamp:
     def __init__(self, vec=None):
         assert (len(vec) == 1)

@@ -5,11 +5,17 @@ By **spatial**
 - 3-DoF relative position (), 
 - 3-DoF attitude , 
 - 6-DoF pose (position + orientation represented by quaternions in the [qx qy qz qw] order)
-- 3-DoF position and 3-DoF orientation with uncertainty (position and orientation uncertainties is given by two 3x3 upper triangular covariance matrices). **TODO: the space/reference frame of the covariance needs to be specified and the in case of an error-state estimator, the error representation of the orientation needs to be specified in the CSV files.**  
+- 3-DoF position and 3-DoF orientation with uncertainty (position and orientation uncertainties is given by two 3x3 upper triangular covariance matrices). **TODO: make default assumption on the uncertainty space**
+- 3-DoF position and 3-DoF orientation with **typed** uncertainty (position and orientation uncertainties is given by two 3x3 upper triangular covariance matrices) [1*]. 
+- 6-DoF pose with upper triangular pose uncertainty. **TODO: make default assumption on the uncertainty space**
+- 6-DoF pose with upper triangular pose  **typed** uncertainty  [1*] .
+
+[1*] Typed uncertainty: The space/reference frame of the covariance is specified by the "est_err_type" and "err_representation" entry. In case of an error-state estimator, the error representation of the orientation needs to be specified in the CSV files. The estimation error types are defined in the [EstimationErrorType](./cnspy_spatial_csv_formats/EstimationErrorType.py) file. The error representation type is defined in the [ErrorRepresentationType](./cnspy_spatial_csv_formats/ErrorRepresentationType.py) file. 
+
 
 Orientation are represented by quaternions in the [qx qy qz qw] order, meaning that the real-part appears at the end aka JPL order.
 
-File headers are in the first line of a CSV file starting with a `#`, followed by a sequence of unique comma separated strings/chars. 
+File headers are in the first line of a CSV file **should not** start with a `#`, followed by a sequence of unique comma separated strings/chars. 
 
 It is highly recommended loading the CSV files into a [pandas.DataFrame](https://pypi.org/project/pandas/). For convenience, there is a package called [cnspy_csv2dataframe](https://github.com/aau-cns/cnspy_csv2dataframe) that does the conversion using the [CSVFormatPose](CSVFormatPose.py) definitions.
 

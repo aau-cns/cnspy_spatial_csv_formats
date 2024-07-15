@@ -15,7 +15,7 @@ with open(path.join(here, 'RELEASE'), encoding='utf-8') as f:
 
 setup(
     name='cnspy_spatial_csv_formats',
-    version=release,
+    version="0.2.1",
     author='Roland Jung',
     author_email='roland.jung@aau.at',    
     description='Spatial formats for CSV files.',

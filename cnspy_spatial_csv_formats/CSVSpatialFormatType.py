@@ -29,6 +29,7 @@ from cnspy_spatial_csv_formats.ErrorRepresentationType import ErrorRepresentatio
 class CSVSpatialFormatType(Enum):
     Timestamp = 'Timestamp'
     PoseStamped = 'PoseStamped'
+    Pose2DStamped = 'Pose2DStamped'
     TUM = 'TUM'  # TUM-Format stems from: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools#evaluation
     PositionStamped = 'PositionStamped'
     PosOrientCov = 'PosOrientCov'
@@ -56,6 +57,7 @@ class CSVSpatialFormatType(Enum):
     def list():
         return list([str(CSVSpatialFormatType.Timestamp),
                      str(CSVSpatialFormatType.PoseStamped),
+                     str(CSVSpatialFormatType.Pose2DStamped),
                      str(CSVSpatialFormatType.TUM),
                      str(CSVSpatialFormatType.PositionStamped),
                      str(CSVSpatialFormatType.PosOrientCov),
@@ -81,6 +83,8 @@ class CSVSpatialFormatType(Enum):
             return ['t']
         elif str(fmt) == 'TUM' or str(fmt) == 'PoseStamped':
             return ['t', 'tx', 'ty', 'tz', 'qx', 'qy', 'qz', 'qw']
+        elif str(fmt) == 'Pose2DStamped':
+            return ['t', 'tx', 'ty', 'yaw']
         elif str(fmt) == 'PositionStamped':
             return ['t', 'tx', 'ty', 'tz']
         elif str(fmt) == 'PosOrientCov':
@@ -141,6 +145,8 @@ class CSVSpatialFormatType(Enum):
             return ps.sTimestamp(vec=[float(x) for x in elems[0:1]])
         elif str(fmt) == 'TUM' or str(fmt) == 'PoseStamped' or len(elems) == 8:
             return ps.sTUMPoseStamped(vec=[float(x) for x in elems[0:8]])
+        elif str(fmt) == 'Pose2DStamped' or len(elems) == 4:
+            return ps.Pose2DStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PositionStamped' or len(elems) == 4:
             return ps.sPositionStamped(vec=[float(x) for x in elems[0:4]])
         elif str(fmt) == 'PosOrientCov' or len(elems) == 13:

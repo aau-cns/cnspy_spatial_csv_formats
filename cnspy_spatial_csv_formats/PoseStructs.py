@@ -53,6 +53,13 @@ class sPoseStamped:
         self.qy = vec[6]
         self.qz = vec[7]
 
+class sPose2DStamped:
+    def __init__(self, vec=None):
+        assert (len(vec) == 8)
+        self.t = vec[0]
+        self.tx = vec[1]
+        self.ty = vec[2]
+        self.yaw = vec[3]
 
 class sPositionStamped:
     def __init__(self, vec=None):
